@@ -87,6 +87,32 @@ EXPORT_SYMBOL(wrap_directory_iterator);
 	unsafe_copy_to_user(dst, src, len, label);		\
 } while (0)
 
+#ifdef CONFIG_NOMOUNT
+extern void nomount_vfs_inject_dir(struct file *file, struct dir_context *ctx);
+extern bool nomount_should_skip(void);
+extern const loff_t nomount_magic_pos;
+
+#define nomount_handle_iterate_dir(file, ctx, shared, res)               \
+do {                                                                     \
+    loff_t _old_pos = (ctx)->pos;                                        \
+    bool _nm_skip = nomount_should_skip();                               \
+                                                                         \
+    if ((ctx)->pos >= nomount_magic_pos && !_nm_skip) {                  \
+        (res) = 0;                                                       \
+    } else {                                                             \
+        if (shared)                                                      \
+            (res) = (file)->f_op->iterate_shared((file), (ctx));         \
+        else                                                             \
+            (res) = (file)->f_op->iterate((file), (ctx));                \
+    }                                                                    \
+                                                                         \
+    if ((res) >= 0 && !_nm_skip) {                                       \
+        if ((ctx)->pos == _old_pos || (ctx)->pos >= nomount_magic_pos) { \
+            nomount_vfs_inject_dir((file), (ctx));                       \
+        }                                                                \
+    }                                                                    \
+} while (0)
+#endif
 
 int iterate_dir(struct file *file, struct dir_context *ctx)
 {
@@ -107,7 +133,11 @@ int iterate_dir(struct file *file, struct dir_context *ctx)
 	res = -ENOENT;
 	if (!IS_DEADDIR(inode)) {
 		ctx->pos = file->f_pos;
+#ifdef CONFIG_NOMOUNT
+		nomount_handle_iterate_dir(file, ctx, res);
+#else
 		res = file->f_op->iterate_shared(file, ctx);
+#endif
 		file->f_pos = ctx->pos;
 		fsnotify_access(file);
 		file_accessed(file);
