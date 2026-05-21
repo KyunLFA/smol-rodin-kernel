@@ -55,7 +55,8 @@ struct nomount_dir_node {
     struct list_head private_list;
     struct list_head children_names; 
     DECLARE_HASHTABLE(children_ht, NM_CHILD_HASH_BITS);
-    char *dir_path;              
+    char *dir_path;
+    u32 dir_hash;
     unsigned long dir_ino;
     u32 next_child_index;
     u16 dir_path_len;
