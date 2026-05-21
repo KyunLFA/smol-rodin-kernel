@@ -21,9 +21,9 @@ static DEFINE_HASHTABLE(nomount_rules_by_vpath,    NOMOUNT_HASH_BITS);
 static DEFINE_HASHTABLE(nomount_rules_by_real_ino, NOMOUNT_HASH_BITS);
 static DEFINE_HASHTABLE(nomount_rules_by_v_ino,    NOMOUNT_HASH_BITS);
 static DEFINE_HASHTABLE(nomount_basenames_ht,      NOMOUNT_HASH_BITS);
+static DEFINE_HASHTABLE(nomount_private_dirs_ht,   NOMOUNT_HASH_BITS);
 static DEFINE_HASHTABLE(nomount_uid_ht,            NOMOUNT_UID_HASH_BITS);
 static LIST_HEAD(nomount_rules_list);
-static LIST_HEAD(nomount_private_dirs_list);
 static DEFINE_MUTEX(nomount_write_mutex);
 static DECLARE_RWSEM(nomount_dirs_rwsem);
 
@@ -50,7 +50,8 @@ struct nomount_rule {
 };
 
 struct nomount_dir_node {
-    struct hlist_node node;      
+    struct hlist_node node;
+    struct hlist_node private_hash_node;
     struct list_head private_list;
     struct list_head children_names; 
     DECLARE_HASHTABLE(children_ht, NM_CHILD_HASH_BITS);
@@ -121,5 +122,8 @@ enum {
 #define NM_OPS_POLICY(p)
 #define NM_FAMILY_POLICY(p) .policy = (p),
 #endif
+
+/* Application UID start */
+#define AID_APP_START 10000
 
 #endif /* _LINUX_NOMOUNT_H */
