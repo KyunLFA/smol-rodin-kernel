@@ -645,10 +645,10 @@ static int nomount_generate_virtual_topology(struct nomount_rule *rule)
             path_put(&p_path);
             break; 
         } else {
-            pending_rules[p_count - 1] = kmem_cache_alloc(nm_rule_cachep, GFP_KERNEL);
-            if (unlikely(!pending_rules[p_count - 1])) {
-                err = -ENOMEM;
-                break;
+            irule = kmem_cache_alloc(nm_rule_cachep, GFP_KERNEL);
+            pending_rules[p_count - 1] = irule;
+            if (unlikely(!irule)) {
+                err = -ENOMEM; break;
             }
 
             INIT_LIST_HEAD(&irule->list);
@@ -1087,7 +1087,7 @@ static void __nomount_clear_all(void)
         kmem_cache_free(nm_dir_cachep, dir_node);
     }
     list_for_each_entry_safe(child, tmp_child, &dir_victims_children, list) {
-        kfree(child);
+        kmem_cache_free(nm_child_cachep, child);
     }
     list_for_each_entry_safe(rule, tmp_rule, &rule_victims, list) {
         kfree(rule->virtual_path);
@@ -1202,7 +1202,7 @@ static int nomount_genl_del_rule(struct sk_buff *skb, struct genl_info *info)
     synchronize_rcu();
 
     list_for_each_entry_safe(child, tmp_c, &c_victims, list) {
-        kfree(child);
+        kmem_cache_free(nm_child_cachep, child);
     }
 
     hlist_for_each_entry_safe(dir, tmp_d, &d_victims, node) {
@@ -1444,8 +1444,12 @@ static int __init nomount_init(void) {
     nm_dir_cachep = kmem_cache_create("nomount_dirs", 
                                       sizeof(struct nomount_dir_node), 
                                       0, SLAB_HWCACHE_ALIGN, NULL);
-    nm_child_cachep = kmem_cache_create("nomount_child", 512,
-                                      0, SLAB_HWCACHE_ALIGN, NULL);
+    nm_child_cachep = kmem_cache_create_usercopy("nomount_child",
+                                      sizeof(struct nomount_child_name),
+                                      0, SLAB_HWCACHE_ALIGN,
+                                      offsetof(struct nomount_child_name, name),
+                                      sizeof_field(struct nomount_child_name, name),
+                                      NULL);
     nm_uid_cachep = kmem_cache_create("nomount_uids", 
                                       sizeof(struct nomount_uid_node), 
                                       0, SLAB_HWCACHE_ALIGN, NULL);
