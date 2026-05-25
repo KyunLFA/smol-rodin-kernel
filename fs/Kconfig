@@ -435,4 +435,11 @@ config KSU_SUSFS_HARDENED
 	  Fixes upstream SUSFS concurrency and error-handling bugs.
 	  Disable to match exact upstream behavior.
 
+config NOMOUNT
+	bool "NoMount Path Redirection Subsystem"
+	default y
+	help
+	  NoMount allows path redirection and virtual file injection
+	  without mounting filesystems. Useful for systemless modifications.
+
 endmenu
