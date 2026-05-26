@@ -9,6 +9,12 @@ v0.0.2:
 - Re-enable AnyKernel generation as requested by Poco X7 Pro community Telegram group.
 - Add more compiler optimizations (detailed below)
 
+v0.1.0:
+- Embed KernelSU from Tiann (not a submodule cause lazy, don't want to manage a fork and point submodule to it). Rename the dot-git-renamed to get the repo back!!
+- A little merge from android15-6.6
+- Bump nomount, erasing Claude's fixes which were addressed upstream.
+- Update binaries in Anykernel3
+- Update KernelSU
 
 Changes from Capybara kernel to Smol kernel:
 - Use various optimization commits dropped from Capybara 4.0 to 5.0
