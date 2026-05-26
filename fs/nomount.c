@@ -112,10 +112,11 @@ static inline bool __nomount_is_traversal_allowed_rcu(struct inode *inode) {
  * Returns a pointer to the allocated path string on success, or NULL on failure.
  * Caller must free the returned buffer using __putname() after use the pointer.
  */
-static char *nomount_build_path_from_pwd(const char *rel_name, size_t name_len, size_t *out_len, const char **out_path) 
+static const char *nomount_build_path_from_pwd(const char *rel_name, size_t name_len, size_t *out_len, const char **out_path) 
 {
     struct path pwd;
-    char *cwd_str, *page_buf = __getname();
+    const char *page_buf = __getname();
+    char *end_ptr, *cwd_str;
     size_t dir_len;
 
     if (!page_buf) return NULL;
@@ -124,7 +125,7 @@ static char *nomount_build_path_from_pwd(const char *rel_name, size_t name_len, 
     pwd = current->fs->pwd;
     path_get(&pwd);
     rcu_read_unlock();
-    cwd_str = d_path(&pwd, page_buf, PATH_MAX);
+    cwd_str = d_path(&pwd, (char *)page_buf, PATH_MAX);
     path_put(&pwd);
 
     if (IS_ERR_OR_NULL(cwd_str)) {
@@ -134,8 +135,12 @@ static char *nomount_build_path_from_pwd(const char *rel_name, size_t name_len, 
 
     dir_len = strlen(cwd_str);
     if (likely(dir_len + name_len + 2 <= PATH_MAX)) {
-        char *end_ptr = page_buf + dir_len; 
-        if (dir_len > 0 && cwd_str[dir_len - 1] != '/') {
+        if (cwd_str != page_buf) {
+            memmove((char *)page_buf, cwd_str, dir_len);
+            cwd_str = (char *)page_buf;
+        }
+        end_ptr = cwd_str + dir_len;
+        if (dir_len > 0 && *(end_ptr - 1) != '/') {
             *end_ptr = '/'; end_ptr++; dir_len++;
         }
         memcpy(end_ptr, rel_name, name_len + 1);
@@ -293,8 +298,7 @@ int nomount_handle_permission(struct inode *inode, int mask)
 struct filename *nomount_handle_getname(struct filename *name)
 {
     struct nomount_rule *rule;
-    char *abs_path = NULL;
-    const char *check_name, *s, *last_slash;
+    const char *check_name, *s, *last_slash, *page_buf = NULL;
     size_t name_len, b_len, r_len;
     bool basename_match = false;
     u32 b_hash;
@@ -340,8 +344,8 @@ struct filename *nomount_handle_getname(struct filename *name)
     check_name = s;
     r_len = name_len;
     if (unlikely(s[0] != '/')) {
-        abs_path = nomount_build_path_from_pwd(s, name_len, &r_len, &check_name);
-        if (!abs_path) return name;
+        page_buf = nomount_build_path_from_pwd(s, name_len, &r_len, &check_name);
+        if (!page_buf) return name;
     }
 
     rcu_read_lock();
@@ -352,7 +356,7 @@ struct filename *nomount_handle_getname(struct filename *name)
         nm_debug("Redirected: %s -> %s\n", check_name, rule->real_path);
     }
     rcu_read_unlock();
-    if (abs_path) __putname(abs_path);
+    if (page_buf) __putname(page_buf);
     return name;
 
 out_unlock:
@@ -683,6 +687,53 @@ static void __nomount_inject_child_locked(struct nomount_dir_node *dir_node, str
 
     if (old_array && atomic_dec_and_test(&old_array->refcnt)) {
         kfree_rcu(old_array, rcu);
+    }
+}
+
+static void __nomount_delete_child_locked(struct nomount_dir_node *dir_node, unsigned long fake_ino, 
+                                          struct hlist_head *d_victims)
+{
+    struct nm_child_array *old_array, *new_array;
+    int found_idx = -1;
+    u32 i, num, dst = 0;
+
+    old_array = rcu_dereference_protected(dir_node->child_array,
+                    lockdep_is_held(&nomount_write_mutex));
+    if (!old_array) return;
+
+    num = old_array->num_children;
+    for (i = 0; i < num; i++) {
+        if (old_array->entries[i].fake_ino == fake_ino) {
+            found_idx = i;
+            break;
+        }
+    }
+
+    if (found_idx == -1) return;
+
+    if (num == 1) {
+        rcu_assign_pointer(dir_node->child_array, NULL);
+        if (atomic_dec_and_test(&old_array->refcnt)) kfree_rcu(old_array, rcu);
+        hash_del_rcu(&dir_node->node);
+        if (unlikely(dir_node->is_private)) list_del_rcu(&dir_node->private_list);
+        atomic_dec(&nm_active_dirs);
+        if (atomic_read(&nm_active_dirs) == 0) static_branch_disable(&nomount_active_dirs);
+        hlist_add_head(&dir_node->node, d_victims);
+    } else {
+        new_array = kmalloc(sizeof(struct nm_child_array) +
+                            (num - 1) * sizeof(struct nomount_child_name), GFP_KERNEL);
+        if (unlikely(!new_array)) return;
+
+        atomic_set(&new_array->refcnt, 1);
+        new_array->num_children = num - 1;
+        for (i = 0; i < num; i++) {
+            if (i == found_idx) continue;
+            memcpy(&new_array->entries[dst++], &old_array->entries[i],
+                    sizeof(struct nomount_child_name));
+        }
+        rcu_assign_pointer(dir_node->child_array, new_array);
+        if (atomic_dec_and_test(&old_array->refcnt))
+            kfree_rcu(old_array, rcu);
     }
 }
 
@@ -1029,50 +1080,7 @@ static void __nomount_del_rule(const char *v_path, size_t v_len,
             list_add_tail(&rule->list, r_victims);
             hash_for_each_possible(nomount_dirs_ht, dir, node, rule->parent_ino) {
                 if (dir->dir_ino == rule->parent_ino && dir->dir_dev == rule->parent_dev) {
-                    struct nm_child_array *old_array, *new_array;
-                    int found_idx = -1;
-                    u32 i, num, dst = 0;
-
-                    old_array = rcu_dereference_protected(dir->child_array,
-                                    lockdep_is_held(&nomount_write_mutex));
-                    if (!old_array) continue;
-                    num = old_array->num_children;
-                    for (i = 0; i < num; i++) {
-                        if (old_array->entries[i].fake_ino == hash) {
-                            found_idx = i;
-                            goto found_child;
-                        }
-                    }
-                    continue;
-
-                found_child:
-                    if (num == 1) {
-                        rcu_assign_pointer(dir->child_array, NULL);
-                        if (atomic_dec_and_test(&old_array->refcnt))
-                            kfree_rcu(old_array, rcu);
-                        hash_del_rcu(&dir->node);
-                        if (unlikely(dir->is_private))
-                            list_del_rcu(&dir->private_list);
-                        atomic_dec(&nm_active_dirs);
-                        if (atomic_read(&nm_active_dirs) == 0)
-                            static_branch_disable(&nomount_active_dirs);
-                        hlist_add_head(&dir->node, d_victims);
-                    } else {
-                        new_array = kmalloc(sizeof(struct nm_child_array) +
-                                            (num - 1) * sizeof(struct nomount_child_name),
-                                            GFP_KERNEL);
-                        if (unlikely(!new_array)) break;
-                        atomic_set(&new_array->refcnt, 1);
-                        new_array->num_children = num - 1;
-                        for (i = 0; i < num; i++) {
-                            if (i == found_idx) continue;
-                            memcpy(&new_array->entries[dst++], &old_array->entries[i],
-                                sizeof(struct nomount_child_name));
-                        }
-                        rcu_assign_pointer(dir->child_array, new_array);
-                        if (atomic_dec_and_test(&old_array->refcnt))
-                            kfree_rcu(old_array, rcu);
-                    }
+                    __nomount_delete_child_locked(dir, hash, d_victims);
                     break;
                 }
             }
