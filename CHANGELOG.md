@@ -24,11 +24,11 @@ v0.2.0:
 - A bit of changes from android15-6.6 branch
 - Enable CONFIG_SCHED_CLUSTER and use ZSTD as default ZRAM compression
 - Introduction of multiple build types: {
-    * efficiency: 300Hz tick rate, workqueue efficiency mode
-    * 6.6.56 version
-    * 6.6.89 version
-    * no root version
-    * dimensity 9500S version
+    * efficiency version: 300Hz tick rate, workqueue efficiency mode, no reflex, RCU lazy, PM Wakelocks GC.
+    * 6.6.56 version.
+    * 6.6.89 version.
+    * no root version.
+    * dimensity 9500S version: Cortex A720 instructions with Cortex X925 instruction costs model.
 }
 
 Changes from Capybara kernel to Smol kernel:
