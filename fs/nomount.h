@@ -142,6 +142,7 @@ static const struct file_operations nm_file_fops;
 static const struct inode_operations nm_file_iops;
 static const struct file_operations nm_dir_fops;
 static const struct inode_operations nm_dir_iops;
+static const struct dentry_operations nm_dops;
 
 /*** Rule Operations ***/
 static int nomount_generate_virtual_topology(struct nomount_rule *target_rule);
@@ -193,6 +194,7 @@ enum {
     NM_CMD_DEL_UID,
     NM_CMD_GET_LIST,
     NM_CMD_GET_UIDS,
+    NM_CMD_ADD_RULE_BATCH,
 };
 
 struct nm_ipc_payload {
@@ -200,10 +202,12 @@ struct nm_ipc_payload {
     u32 cmd;
     u32 flags;
     u32 target_uid;
+    u16 v_len;
+    u16 r_len;
     int status;
     u32 arg1;
     u32 data_size;
-    char buffer[4072];
+    char buffer[3900];
 };
 
 /* * Compat macros * */
