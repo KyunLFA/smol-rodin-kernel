@@ -1,0 +1,23 @@
+0000000000000000000000000000000000000000 63b175d8c37482c9fd25fb9bc341289667e4ce57 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785761038 -0300	clone: from https://github.com/tiann/KernelSU
+63b175d8c37482c9fd25fb9bc341289667e4ce57 63b175d8c37482c9fd25fb9bc341289667e4ce57 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785761039 -0300	checkout: moving from main to main
+63b175d8c37482c9fd25fb9bc341289667e4ce57 f69e9a0bb0a49e87bf9a870f9216b1dbf66af41e KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785761085 -0300	commit: susfs by simonpunk
+f69e9a0bb0a49e87bf9a870f9216b1dbf66af41e 979e9c43eb8a34634726ee694c792aac54ac7c57 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785867466 -0300	commit: KowSU Manager support
+979e9c43eb8a34634726ee694c792aac54ac7c57 d622e3d517444d3975a8f0d56b920ca00a4ad219 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938894 -0300	commit: Bump KSU version string for KowSU
+d622e3d517444d3975a8f0d56b920ca00a4ad219 567579a158806600f2f15c9dccb5e9b0428f3a58 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938903 -0300	pull (start): checkout 567579a158806600f2f15c9dccb5e9b0428f3a58
+567579a158806600f2f15c9dccb5e9b0428f3a58 546125d2d30ebb49589aa72938b0576e2620c036 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938904 -0300	pull (pick): susfs by simonpunk
+546125d2d30ebb49589aa72938b0576e2620c036 ff712e4a9cec59636ec0055ba5af488e68f0d3be KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938904 -0300	pull (pick): KowSU Manager support
+ff712e4a9cec59636ec0055ba5af488e68f0d3be dbcc38c37125ca4889fd4f420050692f2d64494a KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938904 -0300	pull (pick): Bump KSU version string for KowSU
+dbcc38c37125ca4889fd4f420050692f2d64494a dbcc38c37125ca4889fd4f420050692f2d64494a KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938904 -0300	pull (finish): returning to refs/heads/main
+dbcc38c37125ca4889fd4f420050692f2d64494a 18b251ec6d7ae1937781e369765a418201e7b301 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786017436 -0300	commit: lel
+18b251ec6d7ae1937781e369765a418201e7b301 e6cc0ef7b0cf7a96af553dedd3282eb3f8ad8d03 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786103766 -0300	pull (start): checkout e6cc0ef7b0cf7a96af553dedd3282eb3f8ad8d03
+e6cc0ef7b0cf7a96af553dedd3282eb3f8ad8d03 536eb418e47511d926c02e1931d7244fea23ddfc KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786103766 -0300	pull (pick): susfs by simonpunk
+536eb418e47511d926c02e1931d7244fea23ddfc 9bffa685430ce193d8ec7264c73b3cbc6293fcca KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786103766 -0300	pull (pick): KowSU Manager support
+9bffa685430ce193d8ec7264c73b3cbc6293fcca 187d4d1f664af54bf98c319fef348c8193710fc0 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786103766 -0300	pull (pick): Bump KSU version string for KowSU
+187d4d1f664af54bf98c319fef348c8193710fc0 9401c7c3c136d85897fc9189012e722140f30d00 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786103766 -0300	pull (pick): lel
+9401c7c3c136d85897fc9189012e722140f30d00 9401c7c3c136d85897fc9189012e722140f30d00 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786103766 -0300	pull (finish): returning to refs/heads/main
+9401c7c3c136d85897fc9189012e722140f30d00 4a5f431127bb360db30088377c4374538c8d1692 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (start): checkout 4a5f431127bb360db30088377c4374538c8d1692
+4a5f431127bb360db30088377c4374538c8d1692 de5adb3cd2957c5f6fba8605e524985e55c097cf KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (pick): susfs by simonpunk
+de5adb3cd2957c5f6fba8605e524985e55c097cf d0249876f3646f4c9e05b6428166b31d79e02567 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (pick): KowSU Manager support
+d0249876f3646f4c9e05b6428166b31d79e02567 f2c044ed57f70eb12fe16c3f0ce00a506232aafa KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (pick): Bump KSU version string for KowSU
+f2c044ed57f70eb12fe16c3f0ce00a506232aafa 7f153d871ae7b6c3efb970d68812458d0745997c KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (pick): lel
+7f153d871ae7b6c3efb970d68812458d0745997c 7f153d871ae7b6c3efb970d68812458d0745997c KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (finish): returning to refs/heads/main

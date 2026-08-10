@@ -1,0 +1,8 @@
+0000000000000000000000000000000000000000 63b175d8c37482c9fd25fb9bc341289667e4ce57 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785761038 -0300	clone: from https://github.com/tiann/KernelSU
+63b175d8c37482c9fd25fb9bc341289667e4ce57 f69e9a0bb0a49e87bf9a870f9216b1dbf66af41e KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785761085 -0300	commit: susfs by simonpunk
+f69e9a0bb0a49e87bf9a870f9216b1dbf66af41e 979e9c43eb8a34634726ee694c792aac54ac7c57 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785867466 -0300	commit: KowSU Manager support
+979e9c43eb8a34634726ee694c792aac54ac7c57 d622e3d517444d3975a8f0d56b920ca00a4ad219 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938894 -0300	commit: Bump KSU version string for KowSU
+d622e3d517444d3975a8f0d56b920ca00a4ad219 dbcc38c37125ca4889fd4f420050692f2d64494a KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1785938904 -0300	pull (finish): refs/heads/main onto 567579a158806600f2f15c9dccb5e9b0428f3a58
+dbcc38c37125ca4889fd4f420050692f2d64494a 18b251ec6d7ae1937781e369765a418201e7b301 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786017436 -0300	commit: lel
+18b251ec6d7ae1937781e369765a418201e7b301 9401c7c3c136d85897fc9189012e722140f30d00 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786103766 -0300	pull (finish): refs/heads/main onto e6cc0ef7b0cf7a96af553dedd3282eb3f8ad8d03
+9401c7c3c136d85897fc9189012e722140f30d00 7f153d871ae7b6c3efb970d68812458d0745997c KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (finish): refs/heads/main onto 4a5f431127bb360db30088377c4374538c8d1692
