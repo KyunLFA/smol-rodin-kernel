@@ -21,3 +21,11 @@ de5adb3cd2957c5f6fba8605e524985e55c097cf d0249876f3646f4c9e05b6428166b31d79e0256
 d0249876f3646f4c9e05b6428166b31d79e02567 f2c044ed57f70eb12fe16c3f0ce00a506232aafa KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (pick): Bump KSU version string for KowSU
 f2c044ed57f70eb12fe16c3f0ce00a506232aafa 7f153d871ae7b6c3efb970d68812458d0745997c KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (pick): lel
 7f153d871ae7b6c3efb970d68812458d0745997c 7f153d871ae7b6c3efb970d68812458d0745997c KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786365764 -0300	pull (finish): returning to refs/heads/main
+7f153d871ae7b6c3efb970d68812458d0745997c 7f153d871ae7b6c3efb970d68812458d0745997c KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447696 -0300	reset: moving to HEAD
+7f153d871ae7b6c3efb970d68812458d0745997c aab67974f1210cad94880ce1fdc14cf63f6e30e0 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447699 -0300	pull (start): checkout aab67974f1210cad94880ce1fdc14cf63f6e30e0
+aab67974f1210cad94880ce1fdc14cf63f6e30e0 87408953686f55a56d6236e2c5958ff1786d7770 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447699 -0300	pull (pick): susfs by simonpunk
+87408953686f55a56d6236e2c5958ff1786d7770 e988138e8e9d91d63dec9fbb7ffa1d452f3834c3 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447699 -0300	pull (pick): KowSU Manager support
+e988138e8e9d91d63dec9fbb7ffa1d452f3834c3 25adf64ac8ff024334cf60ffc23f7f9d25fc10d5 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447699 -0300	pull (pick): Bump KSU version string for KowSU
+25adf64ac8ff024334cf60ffc23f7f9d25fc10d5 e90d3d6d259c0daab141b99b8e97e6f05d5521c4 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447699 -0300	pull (pick): lel
+e90d3d6d259c0daab141b99b8e97e6f05d5521c4 e90d3d6d259c0daab141b99b8e97e6f05d5521c4 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447699 -0300	pull (finish): returning to refs/heads/main
+e90d3d6d259c0daab141b99b8e97e6f05d5521c4 e90d3d6d259c0daab141b99b8e97e6f05d5521c4 KyunLFA <72685096+KyunLFA@users.noreply.github.com> 1786447998 -0300	reset: moving to HEAD
